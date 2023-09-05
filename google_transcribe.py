@@ -63,7 +63,7 @@ def google_transcribe():
 
     transcriptsList = []
 
-    for audio_file_index in range(2):
+    for audio_file_index in range(len(dir_list)):
         print("File number:", audio_file_index)
         audio_file_name = dir_list[audio_file_index]
         print(audio_file_name)
