@@ -13,11 +13,10 @@
       python3 results.py --input_dataset=/path/to/input/dataset --output_dataset=/path/to/output/dataset
 
     examples: 
-      # python3 results.py --input_dataset=./dataset_whisper_large_v2_exception.csv --output_dataset=./dataset_whisper_large_v2_exception_updated.csv
-      # python3 results.py --input_dataset=./dataset1_whisper_large_v2.csv --output_dataset=./dataset1_whisper_large_v2_updated.csv
-      # python3 results.py --input_dataset=./dataset2_whisper_large_v2.csv --output_dataset=./dataset2_whisper_large_v2_updated.csv
-      # python3 results.py --input_dataset=./dataset3_whisper_large_v2.csv --output_dataset=./dataset3_whisper_large_v2_updated.csv
-
+      python3 results.py --input_dataset=./results/dataset_whisper_large_v2_exception.csv --output_dataset=./results/dataset_whisper_large_v2_exception_updated.csv
+      python3 results.py --input_dataset=./results/dataset1_whisper_large_v2.csv --output_dataset=./results/dataset1_whisper_large_v2_updated.csv
+      python3 results.py --input_dataset=./results/dataset2_whisper_large_v2.csv --output_dataset=./results/dataset2_whisper_large_v2_updated.csv
+      python3 results.py --input_dataset=./results/dataset3_whisper_large_v2.csv --output_dataset=./results/dataset3_whisper_large_v2_updated.csv
 """
 
 import pandas as pd

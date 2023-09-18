@@ -95,7 +95,7 @@ pipe = pipeline(
   chunk_length_s=30,
   device=device
 )
-file_list = ['14875064946041.wav', 'WUG-x1TFewA_5d924503d5be181566c3fde5.wav']
+
 for audio_file in file_list:
 
   count+=1
