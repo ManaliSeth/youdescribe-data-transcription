@@ -11,7 +11,7 @@
       python3 dataset.py --input_dataset=/path/to/input/dataset
       
     example:
-      python3 dataset.py --input_dataset=/home/922053012/YD_2.0_transcribed_audio_clips_english_v5.csv
+      python3 dataset.py --input_dataset=../../YD_2.0_transcribed_audio_clips_english_v5.csv
 
 """
 

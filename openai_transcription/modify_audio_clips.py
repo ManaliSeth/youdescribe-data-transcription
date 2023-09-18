@@ -13,9 +13,9 @@
         python3 modify_audio_clips.py --input_dataset=/path/to/input/dataset --audio_clip_dir=/path/to/audio_clip_directory --modified_audio_clip_dir=/path/to/modified_audio_clip_directory
 
     examples: 
-        python3 modify_audio_clips.py --input_dataset=./dataset/dataset1.csv --audio_clip_dir=../AudioClips_DataRepoService/ --modified_audio_clip_dir=./modified_audio_clips/
-        python3 modify_audio_clips.py --input_dataset=./dataset/dataset2.csv --audio_clip_dir=../AudioClips_DataRepoService/ --modified_audio_clip_dir=./modified_audio_clips/
-        python3 modify_audio_clips.py --input_dataset=./dataset/dataset3.csv --audio_clip_dir=../AudioClips_DataRepoService/ --modified_audio_clip_dir=./modified_audio_clips/
+        python3 modify_audio_clips.py --input_dataset=./dataset/dataset1.csv --audio_clip_dir=../../AudioClips_DataRepoService/ --modified_audio_clip_dir=./modified_audio_clips/
+        python3 modify_audio_clips.py --input_dataset=./dataset/dataset2.csv --audio_clip_dir=../../AudioClips_DataRepoService/ --modified_audio_clip_dir=./modified_audio_clips/
+        python3 modify_audio_clips.py --input_dataset=./dataset/dataset3.csv --audio_clip_dir=../../AudioClips_DataRepoService/ --modified_audio_clip_dir=./modified_audio_clips/
 """
    
 import pandas as pd
