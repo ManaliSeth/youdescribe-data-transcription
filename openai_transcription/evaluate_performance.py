@@ -10,12 +10,13 @@
     Run: python3 evaluate_performance.py --input_dataset=/path/to/input/dataset --output_dataset=/path/to/output/dataset
       example:
         within open_ai transcription foler, run below command in terminal
-        python3 evaluate_performance.py --input_dataset1=./results/dataset1_whisper_large_v2_updated.csv --input_dataset2=./results/dataset2_whisper_large_v2_updated.csv --input_dataset3=./results/dataset3_whisper_large_v2_updated.csv --input_dataset4=./results/dataset_whisper_large_v2_exception_updated.csv  --output_dataset=./results/dataset_whisper_large_v2_evaluation.csv 
+        python3 evaluate_performance.py --input_dataset1=./results/dataset1_whisper_large_v2_updated.csv --input_dataset2=./results/dataset2_whisper_large_v2_updated.csv --input_dataset3=./results/dataset3_whisper_large_v2_updated.csv --input_dataset4=./results/dataset_whisper_large_v2_exception_updated.csv  --output_dataset=./results/dataset_whisper_large_v2_assessment.csv 
 """
 
 import pandas as pd
 import argparse
 import os
+import re
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -40,10 +41,15 @@ def generate_bleu_score(sentence1, sentence2):
     # Create a SmoothingFunction
     smooth_fn = SmoothingFunction().method1
 
-    bleu_score = sentence_bleu(sentence1, sentence2, smoothing_function=smooth_fn)
-    bleu_score = round(bleu_score, 3)
+    # calculate bleu_score with db transcript as reference and open_ai transcript as candidate
+    bleu_score_gr_oc = sentence_bleu([sentence1], sentence2, smoothing_function=smooth_fn)
+    bleu_score_gr_oc = round(bleu_score_gr_oc, 3)
 
-    return bleu_score
+    # calculate bleu_score with open_ai transcript as reference and db transcript as candidate
+    bleu_score_or_gc = sentence_bleu([sentence2], sentence1, smoothing_function=smooth_fn)
+    bleu_score_or_gc = round(bleu_score_or_gc, 3)
+
+    return bleu_score_gr_oc, bleu_score_or_gc
 
 # evaluation metrics - cosine similarity
 def calculate_cosine_similarity(sentence1, sentence2):
@@ -78,7 +84,7 @@ def evaluate_transcripts():
 
     output_file_path = output_file
     if not os.path.isfile(output_file_path):
-        data = {'youdescribe_link': [], 'audio_clip_file_path':[], 'audio_clip_file_name':[], 'audio_clip_duration':[], 'audio_clip_start_time':[], 'audio_clip_end_time':[], 'audio_clip_playback_type':[], 'db_transcript':[], 'oa_transcript_sentence':[], 'bleu_score':[], 'cosine_similarity':[]}
+        data = {'youdescribe_link': [], 'audio_clip_file_path':[], 'audio_clip_file_name':[], 'audio_clip_duration':[], 'audio_clip_start_time':[], 'audio_clip_end_time':[], 'audio_clip_playback_type':[], 'db_transcript':[], 'oa_transcript_sentence':[], 'bleu_score_gr_oc':[], 'bleu_score_or_gc':[], 'cosine_similarity':[]}
         output_df = pd.DataFrame(data)
         output_df.to_csv(output_file_path, index=False, header=True)
     else:
@@ -88,52 +94,56 @@ def evaluate_transcripts():
 
     for row in range(len(input_df)):
 
-        try:
-            print(row)
-            count+=1
-            sentence1 = input_df.loc[row]['db_transcript']
-            sentence2 = input_df.loc[row]['oa_transcript_sentence']
-            
-            bleu_score = generate_bleu_score([sentence1], sentence2)
-            cosine_similarity = calculate_cosine_similarity(sentence1, sentence2)
+        count+=1
 
-            # Fetching info about the audio clip
-            youdescribe_link = input_df.loc[row]['youdescribe_link']
-            file_path = input_df.loc[row]['audio_clip_file_path']
-            file_name = input_df.loc[row]['audio_clip_file_name']
-            duration = input_df.loc[row]['audio_clip_duration']
-            start_time = input_df.loc[row]['audio_clip_start_time']
-            end_time = input_df.loc[row]['audio_clip_end_time']
-            playback_type = input_df.loc[row]['audio_clip_playback_type']
-            db_transcript = input_df.loc[row]['db_transcript']
-            oa_transcript_sentence = input_df.loc[row]['oa_transcript_sentence']
+        # Fetching info about the audio clip
+        youdescribe_link = input_df.loc[row]['youdescribe_link']
+        file_path = input_df.loc[row]['audio_clip_file_path']
+        file_name = input_df.loc[row]['audio_clip_file_name']
+        duration = input_df.loc[row]['audio_clip_duration']
+        start_time = input_df.loc[row]['audio_clip_start_time']
+        end_time = input_df.loc[row]['audio_clip_end_time']
+        playback_type = input_df.loc[row]['audio_clip_playback_type']
+        db_transcript = input_df.loc[row]['db_transcript']
+        oa_transcript_sentence = input_df.loc[row]['oa_transcript_sentence']
 
-            new_data = [{
-            'youdescribe_link': youdescribe_link,
-            'audio_clip_file_path': file_path,
-            'audio_clip_file_name': file_name,
-            'audio_clip_duration': duration,
-            'audio_clip_start_time': start_time,
-            'audio_clip_end_time': end_time,
-            'audio_clip_playback_type': playback_type,
-            'db_transcript': db_transcript,
-            'oa_transcript_sentence': oa_transcript_sentence,
-            'bleu_score': bleu_score,
-            'cosine_similarity': cosine_similarity
-            }]
+        sentence1 = re.sub(r'[^\w\s]', ' ', db_transcript).lower()
+        sentence2 = re.sub(r'[^\w\s]', ' ', oa_transcript_sentence).lower()
 
-            new_row_df = pd.DataFrame(new_data)
+        def handle_exception_and_log(func, *args, **kwargs):
+            try:
+                result = func(*args, **kwargs)
+            except Exception as e:
+                result = str(e)
+                with open('./results/exception_assessment.txt', 'a') as exp:
+                    exp.write(file_name + ' - ' + str(e) + '\n')
+            return result
 
-            # Append the new row
-            output_df = pd.concat([output_df, new_row_df], ignore_index=True)
-            
-            if count % save_interval == 0:
-                output_df.to_csv(output_file_path, index=False)
+        cosine_similarity = handle_exception_and_log(calculate_cosine_similarity, sentence1, sentence2)
+        bleu_score_gr_oc, bleu_score_or_gc = handle_exception_and_log(generate_bleu_score, sentence1, sentence2)
+
+        new_data = [{
+        'youdescribe_link': youdescribe_link,
+        'audio_clip_file_path': file_path,
+        'audio_clip_file_name': file_name,
+        'audio_clip_duration': duration,
+        'audio_clip_start_time': start_time,
+        'audio_clip_end_time': end_time,
+        'audio_clip_playback_type': playback_type,
+        'db_transcript': db_transcript,
+        'oa_transcript_sentence': oa_transcript_sentence,
+        'bleu_score_gr_oc': bleu_score_gr_oc,
+        'bleu_score_or_gc': bleu_score_or_gc,
+        'cosine_similarity': cosine_similarity
+        }]
+
+        new_row_df = pd.DataFrame(new_data)
+
+        # Append the new row
+        output_df = pd.concat([output_df, new_row_df], ignore_index=True)
         
-        except Exception as e:
-            with open('./results/exception_evaluation.txt', 'a') as exp:
-                exp.write(file_name + ' - ' + str(e) + '\n')
-                exp.close()
+        if count % save_interval == 0:
+            output_df.to_csv(output_file_path, index=False)
         
     output_df.to_csv(output_file_path, index=False)
 
