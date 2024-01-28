@@ -1,0 +1,15 @@
+7pcZJBN7GBI_60ee83ea3b2e2707ed89b02e.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74ddb633691c1be3b100c7.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74ddd44415bf48480fa9c7.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74ddeb33691c1be3b100c9.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74ddff33691c1be3b100ca.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74de1d33691c1be3b100cb.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74de344415bf48480fa9c8.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74de4533691c1be3b100cc.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74deaa4415bf48480fa9cd.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74deee33691c1be3b100cf.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74df1433691c1be3b100d0.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74df6433691c1be3b100d1.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74df7333691c1be3b100d2.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74dfbb4415bf48480fa9d2.wav - empty vocabulary; perhaps the documents only contain stop words
+o6PrCynQT0g_5e74dfdc4415bf48480fa9d4.wav - empty vocabulary; perhaps the documents only contain stop words
